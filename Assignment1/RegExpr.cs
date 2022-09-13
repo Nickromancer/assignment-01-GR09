@@ -25,5 +25,12 @@ public static class RegExpr
         }
     }
 
-    public static IEnumerable<string> InnerText(string html, string tag) => throw new NotImplementedException();
+    public static IEnumerable<string> InnerText(string html, string tag) 
+    {
+        var pattern = $@"<(?<tag>{tag}).*?>(?<text>.*?)<\/\1>"; 
+        foreach (Match m in Regex.Matches(tag, pattern))
+        {
+            yield return ()
+        }
+    }
 }
