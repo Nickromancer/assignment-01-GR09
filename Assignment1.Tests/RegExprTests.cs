@@ -50,7 +50,7 @@ public class RegExprTests
     }
 
     [Fact]
-    public void given_HTML_code_and_tag_return_stream_of_titles()
+    public void InnerText_given_HTML_code_and_tag_return_stream_of_titles()
     {
         // Arrange
         var tag = "a";
@@ -68,6 +68,40 @@ public class RegExprTests
         var result = RegExpr.InnerText(html, tag);
         // Assert
         result.Should().BeEquivalentTo(titles);
+    }
+    
+    [Fact]
+    public void InnerText_nested_tags()
+    {
+        // Arrange
+        var tag = "p";
+        var html = "<div>\n\t<p>The phrase <i>regular expressions</i> (and consequently, regexes) is often used to mean the specific, standard textual syntax for representing <u>patterns</u> that matching <em>text</em> need to conform to.</p>\n</div>";
+        var titles = new List<string> {
+            "The phrase regular expressions (and consequently, regexes) is often used to mean the specific, standard textual syntax for representing patterns that matching text need to conform to."
+        };
+
+        // Act
+        var result = RegExpr.InnerText(html, tag);
+
+        // Assert
+        result.Should().BeEquivalentTo(titles);
+    }
+     [Fact]
+    public void given_HTML_return_tuples_of_urls_and_titles()
+    {
+        // Arrange
+        var html = "<div>\n <p>A <b>regular expression</b>, <b>regex</b> or <b>regexp</b> (sometimes called a <b>rational expression</b>) is, in <a href=\"https://en.wikipedia.org/wiki/Theoretical_computer_science\" title=\"Theoretical computer science\">theoretical computer science</a> and <a href=\"https://en.wikipedia.org/wiki/Formal_language\" title=\"Formal language\">formal language</a> theory, a sequence of <a href=\"https://en.wikipedia.org/wiki/Character_(computing)\" title=\"Character (computing)\">characters</a> </p>\n</div>";
+        var urlsAndTitles = new List<Tuple<Uri, string>> {
+            Tuple.Create(new Uri ("https://en.wikipedia.org/wiki/Theoretical_computer_science"), "Theoretical computer science"),
+            Tuple.Create(new Uri("https://en.wikipedia.org/wiki/Formal_language"), "Formal language"),
+            Tuple.Create(new Uri("https://en.wikipedia.org/wiki/Character_(computing)"), "Character (computing)")
+        };
+
+        // Act
+        var result = RegExpr.Urls(html);
+
+        // Assert
+        result.Should().BeEquivalentTo(urlsAndTitles);
     }
     
 }

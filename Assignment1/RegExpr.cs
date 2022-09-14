@@ -27,10 +27,23 @@ public static class RegExpr
 
     public static IEnumerable<string> InnerText(string html, string tag) 
     {
-        var pattern = $@"<({tag}).*?>(?'inside'[\w ]*?)<\/\1>";
+        var pattern = $@"<({tag}).*?>(?'inside'.*?)<\/\1>";
         foreach(Match m in Regex.Matches(html, pattern))
         {
-            yield return m.Groups["inside"].ToString(); 
+            yield return Regex.Replace(m.Groups["inside"].ToString(), @"<\/?.*?>", ""); 
         }
+    }
+
+    public static IEnumerable<(Uri url, string title)> Urls(string html) 
+    {
+        var pattern = @"<(a) href=""(?'url'.*?)""( title=""(?'title'.*?)"")?>([\w ]*?)<\/\1>";
+        foreach(Match m in Regex.Matches(html, pattern))
+        {
+            yield return (new Uri(m.Groups["url"].ToString()), m.Groups["title"].ToString());
+        }
+    }
+    public static IEnumerable<string> Urls(string html, string tag) 
+    {
+        return InnerText(html, tag);
     }
 }
