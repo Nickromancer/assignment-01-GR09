@@ -105,7 +105,7 @@ public class RegExprTests
         // Assert
         result.Should().BeEquivalentTo(titles);
     }
-     [Fact]
+    [Fact]
     public void given_HTML_return_tuples_of_urls_and_titles()
     {
         // Arrange
@@ -113,6 +113,24 @@ public class RegExprTests
         var urlsAndTitles = new List<Tuple<Uri, string>> {
             Tuple.Create(new Uri ("https://en.wikipedia.org/wiki/Theoretical_computer_science"), "Theoretical computer science"),
             Tuple.Create(new Uri("https://en.wikipedia.org/wiki/Formal_language"), "Formal language"),
+            Tuple.Create(new Uri("https://en.wikipedia.org/wiki/Character_(computing)"), "Character (computing)")
+        };
+
+        // Act
+        var result = RegExpr.Urls(html);
+
+        // Assert
+        result.Should().BeEquivalentTo(urlsAndTitles);
+    }
+
+    [Fact]
+    public void given_HTML_return_tuples_of_urls_and_some_titles()
+    {
+        // Arrange
+        var html = "<div>\n <p>A <b>regular expression</b>, <b>regex</b> or <b>regexp</b> (sometimes called a <b>rational expression</b>) is, in <a href=\"https://en.wikipedia.org/wiki/Theoretical_computer_science\" title=\"Theoretical computer science\">theoretical computer science</a> and <a href=\"https://en.wikipedia.org/wiki/Formal_language\">formal language</a> theory, a sequence of <a href=\"https://en.wikipedia.org/wiki/Character_(computing)\" title=\"Character (computing)\">characters</a> </p>\n</div>";
+        var urlsAndTitles = new List<Tuple<Uri, string>> {
+            Tuple.Create(new Uri ("https://en.wikipedia.org/wiki/Theoretical_computer_science"), "Theoretical computer science"),
+            Tuple.Create(new Uri("https://en.wikipedia.org/wiki/Formal_language"), ""),
             Tuple.Create(new Uri("https://en.wikipedia.org/wiki/Character_(computing)"), "Character (computing)")
         };
 
