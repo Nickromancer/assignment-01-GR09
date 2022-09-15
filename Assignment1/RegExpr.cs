@@ -16,12 +16,15 @@ public static class RegExpr
         }
     }
 
-    public static IEnumerable<(int width, int height)> Resolution(string resolutions)
+    public static IEnumerable<(int width, int height)> Resolution(IEnumerable<string> resolutions)
     {
         var pattern = @"(?'width'[0-9]+)x(?'height'[0-9]+)";
-        foreach(Match m in Regex.Matches(resolutions, pattern))
+        foreach(string s in resolutions)
         {
-            yield return (Int32.Parse(m.Groups["width"].ToString()), Int32.Parse(m.Groups["height"].ToString()));
+            foreach(Match m in Regex.Matches(s, pattern))
+            {
+                yield return (Int32.Parse(m.Groups["width"].ToString()), Int32.Parse(m.Groups["height"].ToString()));
+            }
         }
     }
 
